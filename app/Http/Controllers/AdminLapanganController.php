@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ZidanLapangan;
+use App\Models\Kategori;
 
 class AdminLapanganController extends Controller
 {
     public function index()
     {
-        $lapangans = ZidanLapangan::all();
+        $lapangans = ZidanLapangan::with('kategori')->get();
         return view('admin.lapangan.index', compact('lapangans'));
     }
 
     public function create()
     {
-        return view('admin.lapangan.create');
+        $kategoris = Kategori::all();
+        return view('admin.lapangan.create', compact('kategoris'));
     }
 
     public function store(Request $request)
@@ -23,6 +25,7 @@ class AdminLapanganController extends Controller
         $request->validate([
             'nama_lapangan' => 'required',
             'lokasi' => 'required',
+            'kategori_id' => 'required|exists:zidan_kategori,id',
             'deskripsi' => 'nullable',
         ]);
         ZidanLapangan::create($request->all());
@@ -32,7 +35,8 @@ class AdminLapanganController extends Controller
     public function edit($id)
     {
         $lapangan = ZidanLapangan::findOrFail($id);
-        return view('admin.lapangan.edit', compact('lapangan'));
+        $kategoris = Kategori::all();
+        return view('admin.lapangan.edit', compact('lapangan', 'kategoris'));
     }
 
     public function update(Request $request, $id)
@@ -40,6 +44,7 @@ class AdminLapanganController extends Controller
         $request->validate([
             'nama_lapangan' => 'required',
             'lokasi' => 'required',
+            'kategori_id' => 'required|exists:zidan_kategori,id',
             'deskripsi' => 'nullable',
         ]);
         $lapangan = ZidanLapangan::findOrFail($id);

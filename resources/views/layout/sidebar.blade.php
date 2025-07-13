@@ -9,6 +9,9 @@
         <a href="{{ route('admin.lapangan.index') }}" class="block px-4 py-2 rounded hover:bg-blue-50 @if(request()->routeIs('admin.lapangan.*')) bg-blue-100 font-semibold @endif">
             <span class="inline-block mr-2">🏸</span> Kelola Lapangan
         </a>
+        <a href="{{ route('admin.booking.index') }}" class="block px-4 py-2 rounded hover:bg-blue-50 @if(request()->routeIs('admin.booking.*')) bg-blue-100 font-semibold @endif">
+            <span class="inline-block mr-2">📋</span> Kelola Booking
+        </a>
         <form method="POST" action="{{ route('logout') }}" onsubmit="return confirm('Logout?')">
             @csrf
             <button type="submit" class="w-full text-left px-4 py-2 rounded hover:bg-red-50 text-red-600">

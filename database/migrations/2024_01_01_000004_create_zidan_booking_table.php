@@ -15,6 +15,7 @@ return new class extends Migration
             $table->date('tanggal_booking');
             $table->time('jam_mulai');
             $table->time('jam_selesai');
+            $table->string('nomor_hp');
             $table->string('status')->default('pending');
             $table->timestamps();
         });

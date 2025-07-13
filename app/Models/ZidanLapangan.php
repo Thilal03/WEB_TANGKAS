@@ -10,6 +10,11 @@ class ZidanLapangan extends Model
     use HasFactory;
     protected $table = 'zidan_lapangan';
     protected $fillable = [
-        'nama_lapangan', 'lokasi', 'deskripsi',
+        'nama_lapangan', 'lokasi', 'deskripsi', 'kategori_id'
     ];
+
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
 } 

@@ -21,16 +21,24 @@ class LoginController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('email', $request->email)->first();
-        if ($user && Hash::check($request->password, $user->password)) {
-            Auth::login($user);
+        $credentials = $request->only('email', 'password');
+        
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            
+            // Redirect based on user role
             if ($user->role === 'admin') {
-                return redirect()->route('admin.dashboard');
+                return redirect()->route('admin.dashboard')
+                    ->with('success', 'Selamat datang, Admin! Anda telah berhasil login.');
             } else {
-                return redirect()->route('homepage');
+                return redirect()->route('homepage')
+                    ->with('success', 'Selamat datang! Anda telah berhasil login.');
             }
         }
-        return back()->withErrors(['email' => 'Email atau password salah']);
+        
+        return back()->withErrors([
+            'email' => 'Email atau password yang Anda masukkan salah.',
+        ])->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
@@ -38,6 +46,6 @@ class LoginController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('/')->with('success', 'Anda telah berhasil logout.');
     }
 } 
